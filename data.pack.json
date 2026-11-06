@@ -1,0 +1,650 @@
+{
+ "files": [
+  {
+   "name": "catalog.json",
+   "bytes": 240812
+  },
+  {
+   "name": "versions.json",
+   "bytes": 735008
+  },
+  {
+   "name": "atlas.json",
+   "bytes": 39681
+  },
+  {
+   "name": "atlas.png",
+   "bytes": 338441
+  },
+  {
+   "name": "models.json",
+   "bytes": 626671
+  },
+  {
+   "name": "states.json",
+   "bytes": 1347801
+  },
+  {
+   "name": "entities.json",
+   "bytes": 123787
+  },
+  {
+   "name": "entity_assets.json",
+   "bytes": 23206
+  },
+  {
+   "name": "items.json",
+   "bytes": 35904
+  },
+  {
+   "name": "item_atlas.json",
+   "bytes": 20027
+  },
+  {
+   "name": "item_atlas.png",
+   "bytes": 123657
+  },
+  {
+   "name": "facefix.json",
+   "bytes": 391
+  },
+  {
+   "name": "entity_tex/AllayModel.png",
+   "bytes": 476
+  },
+  {
+   "name": "entity_tex/ArmorStandModel.png",
+   "bytes": 1164
+  },
+  {
+   "name": "entity_tex/AxolotlModel.png",
+   "bytes": 629
+  },
+  {
+   "name": "entity_tex/BatModel.png",
+   "bytes": 768
+  },
+  {
+   "name": "entity_tex/BeeModel.png",
+   "bytes": 577
+  },
+  {
+   "name": "entity_tex/BlazeModel.png",
+   "bytes": 492
+  },
+  {
+   "name": "entity_tex/BoatModel.png",
+   "bytes": 2595
+  },
+  {
+   "name": "entity_tex/CamelModel.png",
+   "bytes": 3165
+  },
+  {
+   "name": "entity_tex/ChestedHorseModel.png",
+   "bytes": 1596
+  },
+  {
+   "name": "entity_tex/ChickenModel.png",
+   "bytes": 472
+  },
+  {
+   "name": "entity_tex/CodModel.png",
+   "bytes": 320
+  },
+  {
+   "name": "entity_tex/CowModel.png",
+   "bytes": 1150
+  },
+  {
+   "name": "entity_tex/CreeperModel.png",
+   "bytes": 2869
+  },
+  {
+   "name": "entity_tex/DolphinModel.png",
+   "bytes": 873
+  },
+  {
+   "name": "entity_tex/DrownedModel.png",
+   "bytes": 660
+  },
+  {
+   "name": "entity_tex/ElytraModel.png",
+   "bytes": 323
+  },
+  {
+   "name": "entity_tex/EndCrystalRenderer.png",
+   "bytes": 1651
+  },
+  {
+   "name": "entity_tex/EnderDragonRenderer.png",
+   "bytes": 1566
+  },
+  {
+   "name": "entity_tex/EndermanModel.png",
+   "bytes": 471
+  },
+  {
+   "name": "entity_tex/EndermiteModel.png",
+   "bytes": 896
+  },
+  {
+   "name": "entity_tex/EvokerFangsModel.png",
+   "bytes": 599
+  },
+  {
+   "name": "entity_tex/FoxModel.png",
+   "bytes": 657
+  },
+  {
+   "name": "entity_tex/GhastModel.png",
+   "bytes": 686
+  },
+  {
+   "name": "entity_tex/GoatModel.png",
+   "bytes": 1382
+  },
+  {
+   "name": "entity_tex/GuardianModel.png",
+   "bytes": 1517
+  },
+  {
+   "name": "entity_tex/HoglinModel.png",
+   "bytes": 2962
+  },
+  {
+   "name": "entity_tex/HorseModel.png",
+   "bytes": 2768
+  },
+  {
+   "name": "entity_tex/HumanoidModel.png",
+   "bytes": 1007
+  },
+  {
+   "name": "entity_tex/IllagerModel.png",
+   "bytes": 970
+  },
+  {
+   "name": "entity_tex/IronGolemModel.png",
+   "bytes": 2790
+  },
+  {
+   "name": "entity_tex/LavaSlimeModel.png",
+   "bytes": 1194
+  },
+  {
+   "name": "entity_tex/LeashKnotModel.png",
+   "bytes": 414
+  },
+  {
+   "name": "entity_tex/LlamaModel.png",
+   "bytes": 1473
+  },
+  {
+   "name": "entity_tex/LlamaSpitModel.png",
+   "bytes": 156
+  },
+  {
+   "name": "entity_tex/MinecartModel.png",
+   "bytes": 566
+  },
+  {
+   "name": "entity_tex/OcelotModel.png",
+   "bytes": 803
+  },
+  {
+   "name": "entity_tex/PandaModel.png",
+   "bytes": 1087
+  },
+  {
+   "name": "entity_tex/ParrotModel.png",
+   "bytes": 709
+  },
+  {
+   "name": "entity_tex/PhantomModel.png",
+   "bytes": 918
+  },
+  {
+   "name": "entity_tex/PigModel.png",
+   "bytes": 263
+  },
+  {
+   "name": "entity_tex/PiglinModel.png",
+   "bytes": 1128
+  },
+  {
+   "name": "entity_tex/PolarBearModel.png",
+   "bytes": 1012
+  },
+  {
+   "name": "entity_tex/PufferfishBigModel.png",
+   "bytes": 696
+  },
+  {
+   "name": "entity_tex/RabbitModel.png",
+   "bytes": 671
+  },
+  {
+   "name": "entity_tex/RavagerModel.png",
+   "bytes": 3422
+  },
+  {
+   "name": "entity_tex/SalmonModel.png",
+   "bytes": 1412
+  },
+  {
+   "name": "entity_tex/SheepFurModel.png",
+   "bytes": 573
+  },
+  {
+   "name": "entity_tex/SheepModel.png",
+   "bytes": 922
+  },
+  {
+   "name": "entity_tex/ShulkerBulletModel.png",
+   "bytes": 776
+  },
+  {
+   "name": "entity_tex/SilverfishModel.png",
+   "bytes": 1104
+  },
+  {
+   "name": "entity_tex/SkeletonModel.png",
+   "bytes": 651
+  },
+  {
+   "name": "entity_tex/SlimeModel.png",
+   "bytes": 397
+  },
+  {
+   "name": "entity_tex/SlimeModel@createOuterBodyLayer.png",
+   "bytes": 397
+  },
+  {
+   "name": "entity_tex/SnifferModel.png",
+   "bytes": 5538
+  },
+  {
+   "name": "entity_tex/SnowGolemModel.png",
+   "bytes": 1581
+  },
+  {
+   "name": "entity_tex/SpiderModel.png",
+   "bytes": 939
+  },
+  {
+   "name": "entity_tex/SpinAttackEffectLayer.png",
+   "bytes": 404
+  },
+  {
+   "name": "entity_tex/StriderModel.png",
+   "bytes": 365
+  },
+  {
+   "name": "entity_tex/TadpoleModel.png",
+   "bytes": 164
+  },
+  {
+   "name": "entity_tex/TridentModel.png",
+   "bytes": 324
+  },
+  {
+   "name": "entity_tex/TropicalFishModelA.png",
+   "bytes": 1185
+  },
+  {
+   "name": "entity_tex/TurtleModel.png",
+   "bytes": 2222
+  },
+  {
+   "name": "entity_tex/VexModel.png",
+   "bytes": 454
+  },
+  {
+   "name": "entity_tex/VillagerModel.png",
+   "bytes": 1192
+  },
+  {
+   "name": "entity_tex/WardenModel.png",
+   "bytes": 2568
+  },
+  {
+   "name": "entity_tex/WitchModel.png",
+   "bytes": 1460
+  },
+  {
+   "name": "entity_tex/WitherBossModel.png",
+   "bytes": 2344
+  },
+  {
+   "name": "entity_tex/WolfModel.png",
+   "bytes": 1392
+  },
+  {
+   "name": "entity_tex/ZombieVillagerModel.png",
+   "bytes": 1334
+  },
+  {
+   "name": "entity_tex/ZombieVillagerModel@createBodyLayer.png",
+   "bytes": 1334
+  },
+  {
+   "name": "entity_tex/banner_base.png",
+   "bytes": 1902
+  },
+  {
+   "name": "entity_tex/be_banner.png",
+   "bytes": 942
+  },
+  {
+   "name": "entity_tex/be_bed_foot.png",
+   "bytes": 1145
+  },
+  {
+   "name": "entity_tex/be_bed_head.png",
+   "bytes": 1145
+  },
+  {
+   "name": "entity_tex/be_bell.png",
+   "bytes": 371
+  },
+  {
+   "name": "entity_tex/be_chest.png",
+   "bytes": 1021
+  },
+  {
+   "name": "entity_tex/be_chest_left.png",
+   "bytes": 1029
+  },
+  {
+   "name": "entity_tex/be_chest_right.png",
+   "bytes": 1078
+  },
+  {
+   "name": "entity_tex/be_conduit_cage.png",
+   "bytes": 463
+  },
+  {
+   "name": "entity_tex/be_conduit_eye.png",
+   "bytes": 156
+  },
+  {
+   "name": "entity_tex/be_conduit_shell.png",
+   "bytes": 315
+  },
+  {
+   "name": "entity_tex/be_conduit_wind.png",
+   "bytes": 476
+  },
+  {
+   "name": "entity_tex/be_decorated_pot.png",
+   "bytes": 362
+  },
+  {
+   "name": "entity_tex/be_decorated_pot_full.png",
+   "bytes": 362
+  },
+  {
+   "name": "entity_tex/be_ender_chest.png",
+   "bytes": 942
+  },
+  {
+   "name": "entity_tex/be_hanging_sign.png",
+   "bytes": 588
+  },
+  {
+   "name": "entity_tex/be_pot_side.png",
+   "bytes": 218
+  },
+  {
+   "name": "entity_tex/be_shulker.png",
+   "bytes": 2677
+  },
+  {
+   "name": "entity_tex/be_shulker_black.png",
+   "bytes": 2065
+  },
+  {
+   "name": "entity_tex/be_shulker_blue.png",
+   "bytes": 2483
+  },
+  {
+   "name": "entity_tex/be_shulker_box.png",
+   "bytes": 1894
+  },
+  {
+   "name": "entity_tex/be_shulker_brown.png",
+   "bytes": 2416
+  },
+  {
+   "name": "entity_tex/be_shulker_cyan.png",
+   "bytes": 2478
+  },
+  {
+   "name": "entity_tex/be_shulker_gray.png",
+   "bytes": 2362
+  },
+  {
+   "name": "entity_tex/be_shulker_green.png",
+   "bytes": 2335
+  },
+  {
+   "name": "entity_tex/be_shulker_light_blue.png",
+   "bytes": 2550
+  },
+  {
+   "name": "entity_tex/be_shulker_light_gray.png",
+   "bytes": 2566
+  },
+  {
+   "name": "entity_tex/be_shulker_lime.png",
+   "bytes": 2615
+  },
+  {
+   "name": "entity_tex/be_shulker_magenta.png",
+   "bytes": 2629
+  },
+  {
+   "name": "entity_tex/be_shulker_orange.png",
+   "bytes": 2643
+  },
+  {
+   "name": "entity_tex/be_shulker_pink.png",
+   "bytes": 2726
+  },
+  {
+   "name": "entity_tex/be_shulker_purple.png",
+   "bytes": 2505
+  },
+  {
+   "name": "entity_tex/be_shulker_red.png",
+   "bytes": 2464
+  },
+  {
+   "name": "entity_tex/be_shulker_white.png",
+   "bytes": 2635
+  },
+  {
+   "name": "entity_tex/be_shulker_yellow.png",
+   "bytes": 2547
+  },
+  {
+   "name": "entity_tex/be_sign.png",
+   "bytes": 586
+  },
+  {
+   "name": "entity_tex/be_sign_wall.png",
+   "bytes": 586
+  },
+  {
+   "name": "entity_tex/be_skull.png",
+   "bytes": 651
+  },
+  {
+   "name": "entity_tex/be_trapped_chest.png",
+   "bytes": 1089
+  },
+  {
+   "name": "entity_tex/bed_black.png",
+   "bytes": 1138
+  },
+  {
+   "name": "entity_tex/bed_blue.png",
+   "bytes": 1143
+  },
+  {
+   "name": "entity_tex/bed_brown.png",
+   "bytes": 1139
+  },
+  {
+   "name": "entity_tex/bed_cyan.png",
+   "bytes": 1146
+  },
+  {
+   "name": "entity_tex/bed_debug.png",
+   "bytes": 1212
+  },
+  {
+   "name": "entity_tex/bed_gray.png",
+   "bytes": 1148
+  },
+  {
+   "name": "entity_tex/bed_green.png",
+   "bytes": 1141
+  },
+  {
+   "name": "entity_tex/bed_light_blue.png",
+   "bytes": 1145
+  },
+  {
+   "name": "entity_tex/bed_light_gray.png",
+   "bytes": 1136
+  },
+  {
+   "name": "entity_tex/bed_lime.png",
+   "bytes": 1137
+  },
+  {
+   "name": "entity_tex/bed_magenta.png",
+   "bytes": 1140
+  },
+  {
+   "name": "entity_tex/bed_orange.png",
+   "bytes": 1144
+  },
+  {
+   "name": "entity_tex/bed_pink.png",
+   "bytes": 1149
+  },
+  {
+   "name": "entity_tex/bed_purple.png",
+   "bytes": 1142
+  },
+  {
+   "name": "entity_tex/bed_red.png",
+   "bytes": 1145
+  },
+  {
+   "name": "entity_tex/bed_uv_foot.png",
+   "bytes": 229
+  },
+  {
+   "name": "entity_tex/bed_uv_head.png",
+   "bytes": 266
+  },
+  {
+   "name": "entity_tex/bed_white.png",
+   "bytes": 1094
+  },
+  {
+   "name": "entity_tex/bed_yellow.png",
+   "bytes": 1144
+  },
+  {
+   "name": "entity_tex/ex_armor_stand.png",
+   "bytes": 1164
+  },
+  {
+   "name": "entity_tex/ex_chest_boat.png",
+   "bytes": 2598
+  },
+  {
+   "name": "entity_tex/ex_chest_raft.png",
+   "bytes": 2094
+  },
+  {
+   "name": "entity_tex/ex_dragon_head.png",
+   "bytes": 5514
+  },
+  {
+   "name": "entity_tex/ex_enchanting_book.png",
+   "bytes": 366
+  },
+  {
+   "name": "entity_tex/ex_frog.png",
+   "bytes": 740
+  },
+  {
+   "name": "entity_tex/ex_piglin_head.png",
+   "bytes": 1128
+  },
+  {
+   "name": "entity_tex/ex_player.png",
+   "bytes": 1196
+  },
+  {
+   "name": "entity_tex/ex_pufferfish_mid.png",
+   "bytes": 696
+  },
+  {
+   "name": "entity_tex/ex_pufferfish_small.png",
+   "bytes": 696
+  },
+  {
+   "name": "entity_tex/ex_raft.png",
+   "bytes": 1075
+  },
+  {
+   "name": "entity_tex/ex_shield.png",
+   "bytes": 725
+  },
+  {
+   "name": "entity_tex/ex_tropical_fish_b.png",
+   "bytes": 1225
+  },
+  {
+   "name": "entity_tex/fb_BedRenderer.png",
+   "bytes": 1145
+  },
+  {
+   "name": "entity_tex/fb_BookModel.png",
+   "bytes": 366
+  },
+  {
+   "name": "entity_tex/fb_ChestBoatModel.png",
+   "bytes": 2598
+  },
+  {
+   "name": "entity_tex/fb_DecoratedPotRenderer.png",
+   "bytes": 362
+  },
+  {
+   "name": "entity_tex/fb_FrogModel.png",
+   "bytes": 754
+  },
+  {
+   "name": "entity_tex/fb_PlayerModel.png",
+   "bytes": 1141
+  },
+  {
+   "name": "entity_tex/fb_ShieldModel.png",
+   "bytes": 166
+  },
+  {
+   "name": "entity_tex/fb_SkullModel.png",
+   "bytes": 1201
+  }
+ ],
+ "raw_bytes": 3845886,
+ "zip_bytes": 994173
+}

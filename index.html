@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0f1118">
+<title>喵喵结构工坊</title>
+<style>
+  /* ================= 基础 ================= */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #0f1118;
+    color: #e8eaf0;
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  button, input, select {
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    min-width: 44px; min-height: 44px;
+    background: #232838;
+    color: #e8eaf0;
+    border: 1px solid #2e3550;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  button:active { background: #2c3350; }
+  button.primary {
+    background: #ffb347;
+    color: #241a05;
+    border-color: #ffb347;
+    font-weight: 600;
+  }
+  button.primary:active { background: #f0a136; }
+  button.on {
+    background: #ffb347;
+    color: #241a05;
+    border-color: #ffb347;
+  }
+  select {
+    min-height: 44px;
+    background: #232838;
+    color: #e8eaf0;
+    border: 1px solid #2e3550;
+    border-radius: 12px;
+    font-size: 13px;
+    padding: 0 6px;
+    max-width: 86px;
+  }
+
+  /* ================= 3D 画布（全屏，最底层） ================= */
+  #scene {
+    position: fixed;
+    left: 0; top: 56px;
+    width: 100%; height: 300px;  /* 高度由 JS 按上下栏实际高度覆盖 */
+    display: block;
+    touch-action: none; /* 防止页面滚动/缩放，由 Pointer Events 接管 */
+  }
+
+  /* ================= 顶部栏 ================= */
+  #topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    padding-top: calc(8px + env(safe-area-inset-top));
+    background: rgba(23, 26, 36, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid #232838;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    overflow: hidden;
+  }
+  #appTitle {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffb347;
+    white-space: nowrap;
+    margin-right: auto;
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #topbar label {
+    font-size: 12px;
+    color: #9aa3b8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  /* ================= 统计 HUD（左上角） ================= */
+  #btnState {
+    position: fixed;
+    right: 12px;
+    top: calc(64px + env(safe-area-inset-top));
+    z-index: 16;
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(23, 26, 36, 0.92);
+    border: 1px solid #2e3550;
+    color: #ffb347;
+    font-size: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  #btnState.show { display: flex; }
+
+  #specialPanel {
+    position: fixed;
+    left: 10px;
+    bottom: calc(46vh + 10px);
+    z-index: 17;
+    background: rgba(23, 26, 36, 0.94);
+    border: 1px solid #2e3550;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #c8cede;
+    backdrop-filter: blur(8px);
+    overflow: hidden;
+    max-width: 180px;
+  }
+  #specialHead {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 10px; min-height: 34px; cursor: pointer;
+    color: #ffb347; font-weight: 600;
+  }
+  #specialBody { padding: 0 10px 8px; }
+  #specialPanel.closed #specialBody { display: none; }
+  #specialPanel.closed .spArrow { transform: rotate(-90deg); }
+  .spArrow { transition: transform 0.2s; display: inline-block; }
+  .spRow {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 0; border-top: 1px solid #232838;
+  }
+  .spRow b { flex: 0 0 auto; font-weight: 500; color: #9aa3b8; }
+  .spRow label { display: flex; align-items: center; gap: 3px; font-size: 11px; }
+  .spRow input { width: 15px; height: 15px; accent-color: #ffb347; }
+
+  #hud {
+    position: fixed;
+    top: calc(64px + env(safe-area-inset-top));
+    left: 10px;
+    z-index: 15;
+    background: rgba(23, 26, 36, 0.85);
+    border: 1px solid #232838;
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #9aa3b8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    pointer-events: none;
+  }
+  #hud b { color: #ffb347; font-size: 14px; }
+  /* 标题里原来 🐱 的位置，留出等宽空位 */
+  #titleIco { display: inline-block; width: 20px; }
+  /* Unity/Blender 风格的 3D 方向指示：跟着相机转，点一下回正 */
+  #axisGizmo {
+    width: 76px; height: 76px;
+    display: block;
+    margin: -6px 0 0 -8px;
+    touch-action: none;
+    /* ★ #hud 整体是 pointer-events:none（为了不挡画布拖拽），
+       方向指示要单独打开，否则点不到 */
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  #hudLine { font-size: 12px; color: #9aa3b8; }
+  #hudCur { color: #e8eaf0; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ================= 底部区域：工具栏 + 方块库抽屉 ================= */
+  #bottom {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    background: rgba(23, 26, 36, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid #232838;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.35);
+    border-radius: 12px 12px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  #toolbar {
+    display: flex;
+    gap: 4px;
+    padding: 5px 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #toolbar button {
+    flex: 1 0 auto;
+    font-size: 13px;
+    min-height: 36px;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+
+  /* ---- 抽屉 ---- */
+  #drawerHead {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0 12px;
+    cursor: pointer;
+    border-top: 1px solid #232838;
+  }
+  /* 方块库/物品库切换：紧凑的圆角小方块，和原来文字差不多大 */
+  #drawerTitle {
+    font-size: 12px; font-weight: 600; color: #ffb347;
+    background: rgba(255, 179, 71, .08);
+    border: 1px solid rgba(255, 179, 71, .25);
+    border-radius: 5px;
+    padding: 0 6px;
+    height: 20px;
+    line-height: 20px;
+    min-height: 20px;   /* 覆盖全局 button 的 44px 触控高度 */
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+  #drawerTitle::after { content: "⇄"; font-size: 10px; opacity: .55; }
+  #drawerTitle:active { background: rgba(255, 179, 71, .24); }
+  #drawerCount { font-size: 12px; color: #9aa3b8; margin-left: 8px; }
+  #drawerArrow { margin-left: auto; font-size: 14px; color: #9aa3b8; transition: transform 0.2s; }
+  #drawer.closed #drawerArrow { transform: rotate(180deg); }
+  #drawerBody {
+    height: 40vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: height 0.22s ease;
+  }
+  #drawer.closed #drawerBody { height: 0; }
+  #searchRow { padding: 2px 10px 4px; }
+  #catSearch {
+    width: 100%;
+    min-height: 38px;
+    background: #0f1118;
+    color: #e8eaf0;
+    border: 1px solid #2e3550;
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 14px;
+    outline: none;
+  }
+  #catSearch:focus { border-color: #ffb347; }
+  #catTabsWrap {
+    position: relative;
+    flex: 0 0 auto;
+  }
+  #catTabs {
+    display: flex;
+    gap: 6px;
+    padding: 6px 10px 8px;
+    margin: 2px 0 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    z-index: 1;
+    background: transparent;
+  }
+  /* ★ 分类加载进度条：铺在按钮行背后（不随横向滚动跑掉），宽度 = 这批渲染进度 */
+  #catProg {
+    position: absolute;
+    left: 10px; right: 10px; top: 6px; bottom: 8px;
+    width: 0;
+    max-width: calc(100% - 20px);
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgba(255, 179, 71, .38), rgba(255, 179, 71, .10));
+    opacity: 0;
+    transition: width .12s linear, opacity .25s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  #catProg.on { opacity: 1; }
+  #catTabs button {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    min-height: 30px;
+    padding: 0 9px;
+    font-size: 12px;
+    border-radius: 999px;
+  }
+  #catTabs::-webkit-scrollbar { display: none; }
+  #catTabs button.active {
+    background: #ffb347;
+    color: #241a05;
+    border-color: #ffb347;
+    font-weight: 600;
+  }
+  #catGridWrap { flex: 1 1 0; min-height: 0; overflow: hidden; position: relative; }
+  #catGrid {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+    gap: 5px;
+    padding: 4px 8px 10px;
+    align-content: start;
+  }
+  #catHint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5b6478;
+    font-size: 13px;
+    pointer-events: none;
+  }
+  .catItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 2px 6px;
+    min-height: 68px;
+    border-radius: 12px;
+    background: #1d2230;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  .catItem:active { background: #262d42; }
+  .catItem { position: relative; }
+  .catItem.sel { border-color: #ffb347; background: #2a2416; }
+  /* 变体就地展开（参考 MC 创造物品栏） */
+  .vsInline {
+    grid-column: 1 / -1;
+    display: flex; flex-wrap: wrap; gap: 4px;
+    padding: 6px;
+    background: rgba(15, 17, 24, .96);
+    border: 1px solid #2e3550;
+    border-radius: 10px;
+  }
+  .vsMini {
+    width: 48px; min-width: 48px; height: 58px; min-height: 58px;
+    padding: 2px; border-radius: 8px;
+    background: #232838; border: 2px solid #2e3550;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .vsMini.on { border-color: #ffb347; background: #2a2416; }
+  .vsMini canvas { width: 30px; height: 30px; display: block; image-rendering: pixelated; }
+  .vsMini span { font-size: 8px; color: #b9c0d4; line-height: 1.1; }
+
+  /* 变体展开箭头（羊毛/床/蛋糕这种 16 色方块） */
+  .varArrow {
+    position: absolute; top: 0; right: 0;
+    width: 20px; height: 20px; min-width: 20px; min-height: 20px;
+    padding: 0; border-radius: 0 9px 0 7px;
+    font-size: 11px; line-height: 20px;
+    background: rgba(255, 179, 71, .92); color: #241a05;
+    border: none; z-index: 2;
+  }
+  .catTex {
+    width: 40px; height: 40px;
+    border-radius: 4px;
+    background-color: transparent;
+    background-size: 40px 40px;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+  }
+  .catName {
+    font-size: 10px;
+    line-height: 1.25;
+    color: #9aa3b8;
+    max-width: 100%;
+    padding: 0 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    flex: 0 0 auto;
+  }
+  .catItem.sel .catName { color: #ffb347; }
+
+  /* ================= 导出弹窗 ================= */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 7, 12, 0.7);
+  }
+  .modal.show { display: flex; }
+  .modalBox {
+    width: min(340px, calc(100vw - 40px));
+    background: #171a24;
+    border: 1px solid #2e3550;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .sizeRow { display: flex; gap: 10px; margin: 12px 0 6px; }
+  .sizeRow label { flex: 1; display: flex; flex-direction: column; gap: 4px;
+    font-size: 12px; color: #9aa3b8; }
+  .sizeRow input {
+    min-height: 38px; width: 100%; background: #1b2030; color: #e8eaf0;
+    border: 1px solid #2e3550; border-radius: 10px; padding: 0 8px;
+    font-size: 15px; text-align: center;
+  }
+  .sizeTip { font-size: 11px; color: #5b6478; line-height: 1.5; }
+  .modalBox h3 { font-size: 16px; color: #ffb347; margin-bottom: 14px; }
+  .modalBox label.field {
+    display: block;
+    font-size: 12px;
+    color: #9aa3b8;
+    margin-bottom: 10px;
+  }
+  .modalBox input[type="text"] {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 6px;
+    background: #0f1118;
+    color: #e8eaf0;
+    border: 1px solid #2e3550;
+    border-radius: 12px;
+    padding: 0 12px;
+    font-size: 14px;
+    outline: none;
+  }
+  .modalBox label.chk {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #e8eaf0;
+    min-height: 44px;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+  .modalBox label.chk input { width: 20px; height: 20px; accent-color: #ffb347; }
+  .modalBtns { display: flex; gap: 10px; margin-top: 12px; }
+  .modalBtns button { flex: 1; }
+
+  /* ================= 方块状态编辑（底部抽屉） ================= */
+  #stateSheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+    display: none;
+    flex-direction: column;
+    max-height: 66vh;
+    background: linear-gradient(180deg, #1a1e2b 0%, #14171f 100%);
+    border-top: 1px solid #2e3550;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, .55);
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+  #stateSheet.show { display: flex; }
+  .shHead { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .shInfo { flex: 1; min-width: 0; }
+  .shTitle { font-size: 15px; font-weight: 600; color: #ffb347; }
+  .shSub { font-size: 11px; color: #8f97ad; margin-top: 2px; }
+  .shClose { width: 40px; min-width: 40px; height: 40px; min-height: 40px; border-radius: 10px; font-size: 15px; }
+  .shBody { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 2px 0 6px; }
+  .stRow { margin-bottom: 11px; }
+  .stName { font-size: 12px; color: #b9c0d4; margin-bottom: 5px; }
+  .stName b { color: #6f7a96; font-weight: 400; font-size: 11px; margin-left: 4px; }
+  .stChips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stChip {
+    min-width: 0; min-height: 34px; padding: 0 12px;
+    font-size: 12px; border-radius: 9px;
+    background: #232838; color: #c9cfe0; border: 1px solid #2e3550;
+  }
+  .stChip.on { background: #ffb347; color: #241a05; border-color: #ffb347; font-weight: 600; }
+  .shFoot { display: flex; gap: 10px; padding-top: 8px; border-top: 1px solid #232838; }
+  .shFoot button { flex: 1; }
+  .shEmpty { font-size: 12px; color: #6f7a96; padding: 12px 0; line-height: 1.6; }
+
+  /* ================= 变体选择（底部抽屉） ================= */
+  #variantSheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 71;
+    display: none;
+    flex-direction: column;
+    max-height: 62vh;
+    background: linear-gradient(180deg, #1a1e2b 0%, #14171f 100%);
+    border-top: 1px solid #2e3550;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, .55);
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+  #variantSheet.show { display: flex; }
+  .vsGrid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .vsItem {
+    width: 60px; min-width: 60px; height: 72px; min-height: 72px;
+    padding: 3px 2px; border-radius: 10px;
+    background: #232838; border: 2px solid #2e3550;
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+  }
+  .vsItem.on { border-color: #ffb347; background: #2a2416; }
+  .vsItem canvas { width: 36px; height: 36px; display: block; image-rendering: pixelated; }
+  .vsItem span { font-size: 9px; color: #b9c0d4; line-height: 1.15; text-align: center; }
+
+  /* ================= Toast ================= */
+  #toast {
+    position: fixed;
+    left: 50%;
+    top: calc(24px + env(safe-area-inset-top));
+    transform: translateX(-50%) translateY(-16px);
+    z-index: 60;
+    max-width: calc(100vw - 40px);
+    background: rgba(23, 26, 36, 0.96);
+    border: 1px solid #ffb347;
+    color: #e8eaf0;
+    font-size: 13px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ================= Loading ================= */
+  #loading {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #0f1118;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+  }
+  #loadingCat { font-size: 44px; }
+  #loadingText { font-size: 14px; color: #9aa3b8; text-align: center; padding: 0 24px; line-height: 1.7; }
+  #loadingText.err { color: #ff7b7b; }
+  #retryBtn { display: none; }
+  /* ---- 批量替换 ---- */
+  #repModal .modalBox { width: min(94vw, 520px); max-height: 80vh; display: flex; flex-direction: column; }
+  #repFrom, #repTo { width: 100%; margin-top: 6px; }
+  #repTo { height: 168px; }
+  #repFilter { width: 100%; margin-top: 8px; min-height: 38px; }
+  .repInfo { font-size: 12px; color: #9fb0cc; margin: 8px 0 2px; }
+  .repInfo b { color: #ffb347; }
+
+  /* ---- 实体库 ---- */
+  #entModal .modalBox { width: min(92vw, 640px); max-height: 78vh; display: flex; flex-direction: column; }
+  #entGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+             gap: 8px; overflow-y: auto; padding: 4px; flex: 1; min-height: 120px; }
+  .entItem { background: #1b1f2a; border: 1px solid #2c3344; border-radius: 10px;
+             padding: 6px 4px; text-align: center; cursor: pointer; }
+  .entItem.sel { border-color: #ffb347; box-shadow: 0 0 0 2px #ffb34755 inset; }
+  .entItem img { width: 64px; height: 64px; image-rendering: pixelated; display: block; margin: 0 auto; }
+  .entItem span { display: block; font-size: 10px; color: #9fb0cc; margin-top: 2px;
+                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
+</head>
+<body>
+
+<!-- 3D 画布（全屏底层） -->
+<canvas id="scene"></canvas>
+
+<!-- 顶部栏：标题 + 版本 + 尺寸 -->
+<header id="topbar">
+  <div id="appTitle"><span id="titleIco"></span>喵喵结构工坊</div>
+  <label>版本 <select id="verSelect"></select></label>
+  <label>尺寸 <select id="sizeSelect"></select></label>
+</header>
+
+<!-- 统计 HUD（左上角） -->
+<button id="btnState" title="编辑方块状态">⚙</button>
+
+<div id="specialPanel" class="closed">
+  <div id="specialHead"><span>特殊方块</span><span class="spArrow">▾</span></div>
+  <div id="specialBody">
+    <div class="spRow"><b>屏障</b>
+      <label><input type="checkbox" id="spShowBarrier" checked> 显示</label>
+      <label><input type="checkbox" id="spPierceBarrier"> 穿透</label>
+    </div>
+    <div class="spRow"><b>结构空位</b>
+      <label><input type="checkbox" id="spShowVoid" checked> 显示</label>
+      <label><input type="checkbox" id="spPierceVoid"> 穿透</label>
+    </div>
+    <div class="spRow"><b>光源方块</b>
+      <label><input type="checkbox" id="spShowLight" checked> 显示</label>
+      <label><input type="checkbox" id="spPierceLight"> 穿透</label>
+    </div>
+  </div>
+</div>
+
+<div id="hud">
+  <canvas id="axisGizmo" width="168" height="168" title="点一下回正视角"></canvas>
+  <div id="hudLine">当前方块：<span id="hudCur">—</span></div>
+  <!-- 保留元素供旧代码写入，但不再显示（方块数/种类/调试/尺寸） -->
+  <div style="display:none"><b id="hudTotal">0</b><b id="hudTypes">0</b><span id="hudDbg"></span><span id="hudGrid"></span></div>
+</div>
+
+<!-- 底部：工具栏 + 方块库抽屉 -->
+<div id="bottom">
+  <nav id="toolbar">
+    <button id="btnUndo">↩ 撤销</button>
+    <button id="btnRedo">↪ 重做</button>
+    <button id="btnMode">建造</button>
+    <button id="btnXray">透视</button>
+    <button id="btnReplace">替换</button>
+    <button id="btnMod">模组</button>
+    <button id="btnImport">导入</button>
+    <button id="btnClear">清空</button>
+    <button id="btnNew">新建</button>
+    <button id="btnExport" class="primary">导出</button>
+  </nav>
+  <div id="drawer">
+    <div id="drawerHead">
+      <button type="button" id="drawerTitle" title="切换 方块库 / 物品库">方块库</button>
+      <span id="drawerCount"></span>
+      <span id="drawerArrow">▾</span>
+    </div>
+    <div id="drawerBody">
+      <div id="searchRow"><input id="catSearch" type="search" placeholder="搜索方块英文名 / 中文名" autocomplete="off"></div>
+      <div id="catTabsWrap">
+        <div id="catProg"></div>
+        <div id="catTabs"></div>
+      </div>
+      <div id="catGridWrap">
+        <div id="catGrid"></div>
+        <div id="catHint" style="display:none">没有匹配的方块</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 导出弹窗 -->
+<div id="sizeModal" class="modal">
+  <div class="modalBox">
+    <h3>自定义尺寸</h3>
+    <div class="sizeRow">
+      <label>X <input id="szX" type="number" min="1" max="128" value="16"></label>
+      <label>Y <input id="szY" type="number" min="1" max="128" value="16"></label>
+      <label>Z <input id="szZ" type="number" min="1" max="128" value="16"></label>
+    </div>
+    <p class="sizeTip">范围 1~128；Y 建议 ≤64，过高影响性能。</p>
+    <div class="modalBtns">
+      <button id="szCancel">取消</button>
+      <button id="szGo" class="primary">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 切换尺寸：保留结构 or 清空 -->
+<div id="sizeAskModal" class="modal">
+  <div class="modalBox">
+    <h3>切换尺寸</h3>
+    <p class="sizeTip" id="sizeAskTip">—</p>
+    <div class="modalBtns" style="flex-wrap:wrap;gap:8px">
+      <button id="sizeKeep">保留结构</button>
+      <button id="sizeClear">清空重建</button>
+      <button id="sizeCancel2">取消</button>
+    </div>
+  </div>
+</div>
+
+<div id="exportModal" class="modal">
+  <div class="modalBox">
+    <h3>导出</h3>
+    <label class="field">格式
+      <select id="expFmt">
+        <option value="nbt">原版结构 .nbt（结构方块 / 数据包）</option>
+        <option value="litematic">投影 .litematic（Litematica）</option>
+        <option value="schem">投影 .schem（WorldEdit / FAWE）</option>
+      </select>
+    </label>
+    <p class="sizeTip" id="expFmtTip">原版结构：最通用，结构方块直接加载；可选用结构空位填充空白。</p>
+    <label class="field">文件名
+      <input id="expName" type="text" autocomplete="off">
+    </label>
+    <label class="chk" id="expTrimRow"><input type="checkbox" id="expTrim" checked> 空层裁剪（只保留有方块的包围盒）</label>
+    <label class="chk" id="expVoidRow"><input type="checkbox" id="expVoid"> 用结构空位填充空白（粘贴时不覆盖周围原有方块）</label>
+    <p class="sizeTip" style="margin-top:4px">⚠️ 填充后方块数 = 完整体积（如 16³ = 4096），文件会变大</p>
+    <div class="modalBtns">
+      <button id="expCancel">取消</button>
+      <button id="expGo" class="primary">导出</button>
+    </div>
+  </div>
+</div>
+
+<!-- 方块状态编辑（底部抽屉） -->
+<div id="repModal" class="modal">
+  <div class="modalBox">
+    <h3>批量替换方块</h3>
+    <label class="field">原方块（当前世界里有的）
+      <select id="repFrom"></select>
+    </label>
+    <label class="field">换成（可搜索）
+      <input id="repFilter" type="search" placeholder="搜索方块英文名 / 中文名" autocomplete="off">
+      <select id="repTo"></select>
+    </label>
+    <div id="repInfo" class="repInfo">—</div>
+    <div class="modalBtns">
+      <button id="repCancel">取消</button>
+      <button id="repGo" class="primary">替换</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="impFile" accept=".nbt,.litematic,.schem,.schematic" style="display:none">
+<input type="file" id="modFile" accept=".jar,.zip,application/java-archive,application/zip" style="display:none">
+
+<div id="entModal" class="modal">
+  <div class="modalBox">
+    <h3>实体库</h3>
+    <div id="entGrid"></div>
+    <div class="modalBtns">
+      <button id="entClear">不放实体</button>
+      <button id="entClose" class="primary">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="stateSheet">
+  <div class="shHead">
+    <div class="shInfo">
+      <div class="shTitle" id="stTitle">方块</div>
+      <div class="shSub" id="stSub"></div>
+    </div>
+    <button class="shClose" id="stClose">✕</button>
+  </div>
+  <div class="shBody" id="stBody"></div>
+  <div class="shFoot">
+    <button id="stReset">恢复默认</button>
+    <button id="stDone" class="primary">完成</button>
+  </div>
+</div>
+
+<!-- 变体选择（底部抽屉） -->
+<div id="variantSheet">
+  <div class="shHead">
+    <div class="shInfo">
+      <div class="shTitle" id="vsTitle">选择变体</div>
+      <div class="shSub" id="vsSub"></div>
+    </div>
+    <button class="shClose" id="vsClose">✕</button>
+  </div>
+  <div class="shBody" id="vsBody"></div>
+</div>
+
+<!-- Toast 提示 -->
+<div id="toast"></div>
+
+<!-- Loading（含错误重试） -->
+<div id="loading">
+  <div id="loadingCat">🐱</div>
+  <div id="loadingText">加载资源 0/4…</div>
+  <button id="retryBtn" class="primary">重试</button>
+</div>
+
+<!-- 脚本加载顺序：three UMD → nbt → voxel → render → app -->
+<!-- 版本号必须随文件变更递增，否则浏览器会用缓存里的旧代码 -->
+<script src="vendor/three.min.js"></script>
+<script src="js/nbt.js?v=201"></script>
+<script src="js/voxel.js?v=201"></script>
+<script src="js/modelmesh.js?v=200"></script>
+<script src="js/render.js?v=234"></script>
+<script src="js/modimport.js?v=3"></script>
+<script src="js/entity.js?v=243"></script>
+<script src="js/app.js?v=288"></script>
+</body>
+</html>
